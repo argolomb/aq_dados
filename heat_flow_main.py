@@ -11,6 +11,7 @@ def Heat_Flow_Gui(Ui_MainWindow):
 if __name__== "__main__":
     app=QtWidgets.QApplication(sys.argv)
     MainWindow=QtWidgets.QMainWindow()
-    prog =Heat_Flow_Gui(MainWindow)
+    prog =Ui_MainWindow()
+    prog.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
