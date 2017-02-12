@@ -5,10 +5,15 @@
 # Created by: PyQt5 UI code generator 5.7.1
 #
 # WARNING! All changes made in this file will be lost!
+from logging import debug
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from Lista_Serial import get_portas
+
+
 class Ui_MainWindow(object):
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1248, 637)
@@ -20,7 +25,7 @@ class Ui_MainWindow(object):
         self.temp_chart.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.temp_chart.setObjectName("temp_chart")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(20, 50, 301, 292))
+        self.layoutWidget.setGeometry(QtCore.QRect(20, 50, 301, 298))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -28,20 +33,20 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget)
-        self.lineEdit.setObjectName("lineEdit")
-        self.verticalLayout.addWidget(self.lineEdit)
+        self.ports_comboBox = QtWidgets.QComboBox(self.layoutWidget)
+        self.ports_comboBox.setObjectName("ports_comboBox")
+        self.verticalLayout.addWidget(self.ports_comboBox)
         self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.comboBox = QtWidgets.QComboBox(self.layoutWidget)
-        self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.verticalLayout.addWidget(self.comboBox)
+        self.speed_comboBox = QtWidgets.QComboBox(self.layoutWidget)
+        self.speed_comboBox.setObjectName("speed_comboBox")
+        self.speed_comboBox.addItem("")
+        self.speed_comboBox.addItem("")
+        self.speed_comboBox.addItem("")
+        self.speed_comboBox.addItem("")
+        self.speed_comboBox.addItem("")
+        self.verticalLayout.addWidget(self.speed_comboBox)
         self.splitter_2 = QtWidgets.QSplitter(self.layoutWidget)
         self.splitter_2.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_2.setObjectName("splitter_2")
@@ -89,11 +94,14 @@ class Ui_MainWindow(object):
         self.actionParar_Conexao.setObjectName("actionParar_Conexao")
         self.actionSair = QtWidgets.QAction(MainWindow)
         self.actionSair.setObjectName("actionSair")
+        self.actionSobre = QtWidgets.QAction(MainWindow)
+        self.actionSobre.setObjectName("actionSobre")
         self.menuArquivo.addAction(self.actionAbrir)
         self.menuArquivo.addAction(self.actionSalvar)
         self.menuArquivo.addAction(self.actionIniciar_Conexao)
         self.menuArquivo.addAction(self.actionParar_Conexao)
         self.menuArquivo.addAction(self.actionSair)
+        self.menuAjuda.addAction(self.actionSobre)
         self.menubar.addAction(self.menuArquivo.menuAction())
         self.menubar.addAction(self.menuAjuda.menuAction())
 
@@ -105,11 +113,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "Porta Serial"))
         self.label_2.setText(_translate("MainWindow", "Velocidade"))
-        self.comboBox.setItemText(0, _translate("MainWindow", "9600"))
-        self.comboBox.setItemText(1, _translate("MainWindow", "19200"))
-        self.comboBox.setItemText(2, _translate("MainWindow", "38400"))
-        self.comboBox.setItemText(3, _translate("MainWindow", "57600"))
-        self.comboBox.setItemText(4, _translate("MainWindow", "115200"))
+        self.speed_comboBox.setItemText(0, _translate("MainWindow", "9600"))
+        self.speed_comboBox.setItemText(1, _translate("MainWindow", "19200"))
+        self.speed_comboBox.setItemText(2, _translate("MainWindow", "38400"))
+        self.speed_comboBox.setItemText(3, _translate("MainWindow", "57600"))
+        self.speed_comboBox.setItemText(4, _translate("MainWindow", "115200"))
         self.btn_parar.setText(_translate("MainWindow", "Parar"))
         self.btn_conectar.setText(_translate("MainWindow", "Conectar"))
         self.chkb_sensor_1.setText(_translate("MainWindow", "Sensor 1"))
@@ -124,6 +132,20 @@ class Ui_MainWindow(object):
         self.actionIniciar_Conexao.setText(_translate("MainWindow", "Iniciar Conexão"))
         self.actionParar_Conexao.setText(_translate("MainWindow", "Parar Conexão"))
         self.actionSair.setText(_translate("MainWindow", "Sair"))
+        self.actionSobre.setText(_translate("MainWindow", "Sobre"))
+
+
+    def preencher_portas_combobox(self):
+        vNbCombo = ""
+
+        self.ports_comboBox.clear()
+        self.AvailablePorts = get_portas()
+        for value in self.AvailablePorts:
+            self.ports_comboBox.addItem(value)
+            vNbCombo += value + " - "
+        vNbCombo = vNbCombo[:-3]
+        print (("--> Les ports series disponibles sont: %s " % (vNbCombo)))
+
 
 
 if __name__ == "__main__":
