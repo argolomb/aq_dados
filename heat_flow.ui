@@ -150,13 +150,21 @@
     </rect>
    </property>
    <widget class="QMenu" name="menuArquivo">
+    <property name="geometry">
+     <rect>
+      <x>315</x>
+      <y>166</y>
+      <width>131</width>
+      <height>175</height>
+     </rect>
+    </property>
     <property name="title">
      <string>Arquivo</string>
     </property>
     <addaction name="actionAbrir"/>
     <addaction name="actionSalvar"/>
-    <addaction name="actionIniciar_Conex_o"/>
-    <addaction name="actionPara_Conex_o"/>
+    <addaction name="actionIniciar_Conexao"/>
+    <addaction name="actionParar_Conexao"/>
     <addaction name="actionSair"/>
    </widget>
    <widget class="QMenu" name="menuAjuda">
@@ -178,14 +186,14 @@
     <string>Salvar</string>
    </property>
   </action>
-  <action name="actionIniciar_Conex_o">
+  <action name="actionIniciar_Conexao">
    <property name="text">
     <string>Iniciar Conexão</string>
    </property>
   </action>
-  <action name="actionPara_Conex_o">
+  <action name="actionParar_Conexao">
    <property name="text">
-    <string>Para Conexão</string>
+    <string>Parar Conexão</string>
    </property>
   </action>
   <action name="actionSair">
