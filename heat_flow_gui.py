@@ -2,62 +2,47 @@
 
 # Form implementation generated from reading ui file 'heat_flow.ui'
 #
-# Created by: PyQt5 UI code generator 5.7.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
-from logging import debug
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-from Lista_Serial import get_portas
+import serial
+import Lista_Serial
 
 
 class Ui_MainWindow(object):
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1248, 637)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.temp_chart = QtWidgets.QWidget(self.centralwidget)
-        self.temp_chart.setGeometry(QtCore.QRect(340, 50, 891, 521))
+        self.temp_chart.setGeometry(QtCore.QRect(220, 50, 1011, 521))
         self.temp_chart.setAutoFillBackground(False)
         self.temp_chart.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.temp_chart.setObjectName("temp_chart")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(20, 50, 301, 298))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget)
+        self.splitter = QtWidgets.QSplitter(self.centralwidget)
+        self.splitter.setGeometry(QtCore.QRect(30, 100, 151, 240))
+        self.splitter.setOrientation(QtCore.Qt.Vertical)
+        self.splitter.setObjectName("splitter")
+        self.label = QtWidgets.QLabel(self.splitter)
         self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.label)
-        self.ports_comboBox = QtWidgets.QComboBox(self.layoutWidget)
+        self.ports_comboBox = QtWidgets.QComboBox(self.splitter)
         self.ports_comboBox.setObjectName("ports_comboBox")
-        self.verticalLayout.addWidget(self.ports_comboBox)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_2 = QtWidgets.QLabel(self.splitter)
         self.label_2.setObjectName("label_2")
-        self.verticalLayout.addWidget(self.label_2)
-        self.speed_comboBox = QtWidgets.QComboBox(self.layoutWidget)
+        self.speed_comboBox = QtWidgets.QComboBox(self.splitter)
         self.speed_comboBox.setObjectName("speed_comboBox")
         self.speed_comboBox.addItem("")
         self.speed_comboBox.addItem("")
         self.speed_comboBox.addItem("")
         self.speed_comboBox.addItem("")
         self.speed_comboBox.addItem("")
-        self.verticalLayout.addWidget(self.speed_comboBox)
-        self.splitter_2 = QtWidgets.QSplitter(self.layoutWidget)
-        self.splitter_2.setOrientation(QtCore.Qt.Horizontal)
-        self.splitter_2.setObjectName("splitter_2")
-        self.btn_parar = QtWidgets.QPushButton(self.splitter_2)
+        self.btn_parar = QtWidgets.QPushButton(self.splitter)
         self.btn_parar.setObjectName("btn_parar")
-        self.btn_conectar = QtWidgets.QPushButton(self.splitter_2)
-        self.btn_conectar.setObjectName("btn_conectar")
-        self.verticalLayout.addWidget(self.splitter_2)
-        self.splitter = QtWidgets.QSplitter(self.layoutWidget)
-        self.splitter.setOrientation(QtCore.Qt.Vertical)
-        self.splitter.setObjectName("splitter")
+        self.btn_iniciar = QtWidgets.QPushButton(self.splitter)
+        self.btn_iniciar.setObjectName("btn_iniciar")
         self.chkb_sensor_1 = QtWidgets.QCheckBox(self.splitter)
         self.chkb_sensor_1.setObjectName("chkb_sensor_1")
         self.chkb_sensor_2 = QtWidgets.QCheckBox(self.splitter)
@@ -66,17 +51,21 @@ class Ui_MainWindow(object):
         self.chkb_sensor_3.setObjectName("chkb_sensor_3")
         self.chkb_sensor_4 = QtWidgets.QCheckBox(self.splitter)
         self.chkb_sensor_4.setObjectName("chkb_sensor_4")
+        self.btn_conectar = QtWidgets.QPushButton(self.splitter)
+        self.btn_conectar.setObjectName("btn_conectar")
         self.btn_desconectar = QtWidgets.QPushButton(self.splitter)
         self.btn_desconectar.setObjectName("btn_desconectar")
-        self.verticalLayout.addWidget(self.splitter)
-        self.layoutWidget.raise_()
         self.temp_chart.raise_()
+        self.splitter.raise_()
+        self.splitter.raise_()
+        self.splitter.raise_()
+        self.btn_iniciar.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1248, 27))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1248, 19))
         self.menubar.setObjectName("menubar")
         self.menuArquivo = QtWidgets.QMenu(self.menubar)
-        self.menuArquivo.setGeometry(QtCore.QRect(315, 166, 131, 175))
+        self.menuArquivo.setGeometry(QtCore.QRect(315, 166, 130, 146))
         self.menuArquivo.setObjectName("menuArquivo")
         self.menuAjuda = QtWidgets.QMenu(self.menubar)
         self.menuAjuda.setObjectName("menuAjuda")
@@ -108,6 +97,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.ser=serial.Serial()
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -119,11 +110,12 @@ class Ui_MainWindow(object):
         self.speed_comboBox.setItemText(3, _translate("MainWindow", "57600"))
         self.speed_comboBox.setItemText(4, _translate("MainWindow", "115200"))
         self.btn_parar.setText(_translate("MainWindow", "Parar"))
-        self.btn_conectar.setText(_translate("MainWindow", "Conectar"))
+        self.btn_iniciar.setText(_translate("MainWindow", "Iniciar"))
         self.chkb_sensor_1.setText(_translate("MainWindow", "Sensor 1"))
         self.chkb_sensor_2.setText(_translate("MainWindow", "Sensor 2"))
         self.chkb_sensor_3.setText(_translate("MainWindow", "Sensor 3"))
         self.chkb_sensor_4.setText(_translate("MainWindow", "Sensor 4"))
+        self.btn_conectar.setText(_translate("MainWindow", "Conectar"))
         self.btn_desconectar.setText(_translate("MainWindow", "Desconectar"))
         self.menuArquivo.setTitle(_translate("MainWindow", "Arquivo"))
         self.menuAjuda.setTitle(_translate("MainWindow", "Ajuda"))
@@ -137,23 +129,56 @@ class Ui_MainWindow(object):
 
     def preencher_portas_combobox(self):
         vNbCombo = ""
-
         self.ports_comboBox.clear()
-        self.AvailablePorts = get_portas()
+        self.AvailablePorts = Lista_Serial.serial_ports()
         for value in self.AvailablePorts:
             self.ports_comboBox.addItem(value)
             vNbCombo += value + " - "
-        vNbCombo = vNbCombo[:-3]
-        print (("--> Les ports series disponibles sont: %s " % (vNbCombo)))
+            vNbCombo = vNbCombo[:-3]
+        print(("Portas Seriais Disponiveis %s " % (vNbCombo)))
+
+    def OnStart(self):
+        self.speed_comboBox.activated.connect(self.onActivated)
+        self.ports_comboBox.activated.connect(self.onActivated)
+
+    def onActivated(self):
+
+        #print(self.speed_comboBox.currentText())
+        #print(self.ports_comboBox.currentText())
+        self.btn_conectar.clicked.connect(self.conectar)
+        self.btn_desconectar.clicked.connect(self.desconectar)
+        self.btn_iniciar.clicked.connect(self.ler_serial)
+
+    def desconectar(self):
+
+        self.ser.close()
+        print (self.ser)
+
+    def conectar(self):
+        portno = self.ports_comboBox.currentText()
+        baudrate = self.speed_comboBox.currentText()
+        self.ser.port=portno
+        self.ser.baudrate=baudrate
+        self.ser.timeout=1
 
 
+    def ler_serial(self):
+        self.ser.open()
+        print (self.ser)
+        print (self.ser.read())
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
+
     MainWindow = QtWidgets.QMainWindow()
+
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    sys.exit(app.exec_())
 
+    ui.preencher_portas_combobox()
+    ui.OnStart()
+    ui.onActivated()
+
+    sys.exit(app.exec_())
