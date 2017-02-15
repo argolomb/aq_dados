@@ -7,9 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import serial
-import Lista_Serial
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -97,8 +94,6 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.ser=serial.Serial()
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -127,58 +122,22 @@ class Ui_MainWindow(object):
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
 
 
-    def preencher_portas_combobox(self):
+    def preencher_portas_combobox(self, AvailablePorts):
         vNbCombo = ""
         self.ports_comboBox.clear()
-        self.AvailablePorts = Lista_Serial.serial_ports()
-        for value in self.AvailablePorts:
+        for value in AvailablePorts:
             self.ports_comboBox.addItem(value)
             vNbCombo += value + " - "
             vNbCombo = vNbCombo[:-3]
         print(("Portas Seriais Disponiveis %s " % (vNbCombo)))
 
-    def OnStart(self):
-        self.speed_comboBox.activated.connect(self.onActivated)
-        self.ports_comboBox.activated.connect(self.onActivated)
+    def attachInitializeEvent(self, event):
+        self.btn_iniciar.clicked.connect(event)
 
-    def onActivated(self):
+    def attachDisconnectEvent(self, event):
+        self.btn_desconectar.clicked.connect(event)
 
-        #print(self.speed_comboBox.currentText())
-        #print(self.ports_comboBox.currentText())
-        self.btn_conectar.clicked.connect(self.conectar)
-        self.btn_desconectar.clicked.connect(self.desconectar)
-        self.btn_iniciar.clicked.connect(self.ler_serial)
-
-    def desconectar(self):
-
-        self.ser.close()
-        print (self.ser)
-
-    def conectar(self):
-        portno = self.ports_comboBox.currentText()
-        baudrate = self.speed_comboBox.currentText()
-        self.ser.port=portno
-        self.ser.baudrate=baudrate
-        self.ser.timeout=1
-
-
-    def ler_serial(self):
-        self.ser.open()
-        print (self.ser)
-        print (self.ser.read())
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-
-    MainWindow = QtWidgets.QMainWindow()
-
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-
-    ui.preencher_portas_combobox()
-    ui.OnStart()
-    ui.onActivated()
-
-    sys.exit(app.exec_())
+    def attachConnectEvent(self, event):
+        self.btn_conectar.clicked.connect(
+            lambda: event(self.speed_comboBox.currentText(), self.ports_comboBox.currentText())
+        )
